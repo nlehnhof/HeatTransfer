@@ -81,6 +81,9 @@ Energy outflow due to emission:
  E = \varepsilon E_b = \varepsilon \sigma T^4_s   
 \]
 
+where:
+- \(\sigma \) : Stephan-Boltzman Constant of \(5.67 × 10^{−8} \frac{W}{m2 · K^4}\)
+
 Energy absorption due to irradiation:
 \[
 G_{abs} = \alpha G
@@ -88,6 +91,11 @@ G_{abs} = \alpha G
 where:
 - \(G_{abs} \) : Absorbed incident radiation
 - \(\alpha \) : Surface absorptivity (\(0 \leq \alpha \leq 1\))
+
+If α < 1 and the surface is opaque, portions of the irradiation are reflected. If the surface is semitransparent, portions of the irradiation may also be transmitted. However, whereas absorbed and emitted radiation increase and reduce, respectively, the thermal energy of matter, reflected and transmitted radiation have no effect on this energy. Note that the value of α depends on the nature of the irradiation, as well as on the surface itself. For example, the absorptivity of a surface to solar radiation may differ from its absorptivity to radiation emitted by the walls of a furnace.
+
+In many engineering problems (a notable exception being problems involving solar radiation or radiation from other very high temperature sources), liquids can be considered opaque to radiation heat transfer, and gases can be considered transparent to it. Solids can be opaque (as is the case for metals) or semitransparent (as is the case for thin sheets of some polymers and some semiconducting materials).
+
 
 ### Net Radiation Heat Flux
 Stefan–Boltzmann Law:
