@@ -15,14 +15,8 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
-\sisetup{
-    detect-all,
-    per-mode=symbol
-}
+\sisetup{detect-all, per-mode=symbol}
 
-% -----------------------------
-% Listings configuration
-% -----------------------------
 \lstset{
     language=Python,
     basicstyle=\ttfamily\small,
@@ -34,126 +28,139 @@
 }
 
 % -----------------------------
-% Title Information
+% Title Page
 % -----------------------------
-\title{Design and Analysis of a Pin-Fin Heat Sink for Smartphone Cooling}
-\author{Nate Lehnhof}
-\date{\today}
-
 \begin{document}
 
-\maketitle
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Large \textbf{Design and Analysis of a Pin-Fin Heat Sink for Smartphone Cooling}}\\[1.5cm]
+    {\large Nate Lehnhof}\\[0.5cm]
+    {\large Heat Transfer}\\[0.5cm]
+    {\large \today}
+    \vfill
+\end{titlepage}
 
 \begin{abstract}
-Smartphones operating under sustained computational loads, such as navigation
-applications in high ambient temperatures, are susceptible to overheating.
-This report investigates the feasibility of using a pin-fin heat sink attached
-to the rear surface of a smartphone to reduce operating temperature. Analytical
-fin theory is applied to evaluate the effects of fin material, fin geometry, and
-array configuration on heat dissipation performance.
+Smartphones operating under sustained computational loads, such as navigation applications in high ambient temperatures, 
+are susceptible to overheating. This report evaluates the feasibility of using a passive pin-fin heat sink attached to the 
+rear surface of a smartphone to reduce operating temperature. Classical steady-state fin theory is used to model heat dissipation 
+as a function of fin material, fin geometry, and array configuration. Parametric studies are conducted to identify an optimal 
+design and to assess the realism and limitations of the modeling assumptions.
 \end{abstract}
 
 % -----------------------------
 \section{Introduction}
 
-Modern smartphones generate significant heat during extended use. Excessive temperature
-rise can degrade performance, reduce battery life, and cause user discomfort.
-Passive cooling solutions such as pin-fin heat sinks offer a low-power method
-to enhance convective heat transfer.
+Modern smartphones generate significant heat during extended use due to high processor utilization and limited 
+internal heat spreading. Excessive temperature rise can degrade device performance through thermal throttling, 
+reduce battery life, and cause user discomfort. Because smartphones are constrained by size, power consumption, 
+and noise, passive cooling solutions are particularly attractive.
 
-This study analyzes a pin-fin heat sink design attached to the back of a smartphone
-and evaluates how fin length, material, and array configuration influence the phone
-surface temperature.
+This study analyzes a pin-fin heat sink mounted to the back surface of a smartphone and evaluates how fin length, 
+material thermal conductivity, and fin array configuration influence the phone surface temperature under steady-state conditions. 
+The objective is to determine whether a compact pin-fin heat sink can meaningfully reduce operating temperature while remaining 
+realistic for consumer electronics applications.
 
-% -----------------------------
-\section{Physical Model and Assumptions}
-
-\begin{itemize}
-    \item Steady-state heat transfer
-    \item Uniform base temperature across the phone surface
-    \item Negligible thermal resistance between phone and fin base
-    \item Adiabatic fin tips
-    \item Constant convection coefficient
-    \item Radiation effects neglected
-\end{itemize}
-
-Phone base area: $A_b$, heat dissipation rate: $Q$, ambient temperature: $T_\infty$.
+The analysis is performed under the following assumptions: steady-state heat transfer, uniform base temperature 
+across the phone surface, negligible thermal contact resistance between the phone and fin base, adiabatic fin tips, 
+constant convection coefficient over all exposed surfaces, and negligible radiation heat transfer.
 
 % -----------------------------
-\section{Analytical Formulation}
+\section{Methods}
 
-Corrected fin length for adiabatic tip:
+The smartphone is modeled as a uniform heat-generating surface of area $A_b$ dissipating a total heat rate $Q$ to an ambient environment at temperature $T_\infty$. 
+A rectangular array of cylindrical pin fins is attached to the phone surface. Heat transfer occurs by convection from both the exposed base area and the fin surfaces. 
+The phone casing and fin bases are assumed to be at the same uniform temperature $T_b$.
 
+For cylindrical fins with adiabatic tips, a corrected fin length is used to account for end effects:
 \begin{equation}
-L_c = L + \frac{D}{4}
+L_c = L + \frac{D}{4} \qquad \text{(Table 3.5)}
 \end{equation}
 
-Fin parameter:
-
+The fin parameter is defined as
 \begin{equation}
-m = \sqrt{\frac{4h}{kD}}
+m = \sqrt{\frac{4h}{kD}} \qquad \text{(Table 3.5, footnote b)}
 \end{equation}
 
-Fin efficiency:
-
+The fin efficiency is
 \begin{equation}
-\eta_f = \frac{\tanh(m L_c)}{m L_c}
+\eta_f = \frac{\tanh(m L_c)}{m L_c} \qquad \text{(Eq. 3.100)}
 \end{equation}
 
-Base temperature:
-
+The adiabatic tip assumption is appropriate because the fin tip area is small relative to the lateral surface area for slender pin fins, 
+making tip convection negligible. Applying an energy balance to the phone surface yields the steady-state base temperature:
 \begin{equation}
 T_b = T_\infty + \frac{Q}{h A_{b,f} + N \eta_f h A_f}
+\qquad \text{(rearranged from Eq. 3.105)}
 \end{equation}
 
-% -----------------------------
-\section{Results and Discussion}
+Parametric studies were performed using Python to evaluate the influence of fin length, material thermal conductivity, and fin array configuration on phone surface temperature.
 
-\subsection{Parametric Studies}
+% -----------------------------
+\section{Results}
+
+Figure~\ref{fig:allplots}a shows phone surface temperature as a function of fin length for several fin materials,
+while Figure~\ref{fig:allplots}b shows the effect of fin array configuration for aluminum fins.
+Figure~\ref{fig:optimal} presents performance metrics for the optimal design identified in the parametric study.
+Phone surface temperature is shown as a function of fin length for several fin materials and fin array configurations.
+For the optimal design identified (20 aluminum fins of 3 mm diameter), phone temperature is plotted separately, along with fin efficiency as a function of fin length.
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \includegraphics[width=\textwidth]{figures/materials_vs_length.png}
-        \caption{Different materials}
-        \label{fig:materials}
+        \caption{Phone temperature versus fin length for different materials (20 fins, $D=3$ mm).}
     \end{subfigure}
-    \hfill
+    \vfill
     \begin{subfigure}[b]{0.45\textwidth}
         \includegraphics[width=\textwidth]{figures/length_vs_phone_temp_arrays.png}
-        \caption{Different fin arrays (Aluminum)}
-        \label{fig:arrays}
+        \caption{Effect of fin array configuration for aluminum fins.}
     \end{subfigure}
-    
-    \vskip 0.5cm
-    
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{figures/efficiency_vs_length.png}
-        \caption{Fin efficiency (optimal)}
-        \label{fig:efficiency}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{figures/temps_vs_length_optimal.png}
-        \caption{Phone temperature (optimal design)}
-        \label{fig:optimal}
-    \end{subfigure}
-    
-    \caption{Parametric study of phone surface temperature and fin efficiency. All figures shown on one page.}
+    \caption{Parametric study of phone surface temperature for different materials and fin arrays.}
     \label{fig:allplots}
 \end{figure}
 
-% -----------------------------
-\section{Conclusions}
+\begin{figure}[H]
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/efficiency_vs_length.png}
+        \caption{Fin efficiency as a function of fin length.}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{figures/temps_vs_length_optimal.png}
+        \caption{Phone temperature for the selected optimal design (20 aluminum fins, 3 mm diameter).}
+    \end{subfigure}
+    \caption{Optimal design performance metrics.}
+    \label{fig:optimal}
+\end{figure}
 
-Pin-fin heat sinks can significantly reduce smartphone surface temperature under
-steady-state conditions. High-conductivity materials such as Aluminum 2024-T6
-perform best. The optimal design is 20 fins, 3\,mm diameter, balancing heat dissipation
-and manufacturing constraints.
+High-conductivity materials produce substantially lower base temperatures than low-conductivity materials. 
+Increasing fin length reduces phone temperature initially; however, diminishing returns are observed as fin efficiency decreases. 
+Fin array configuration also influences performance, as increasing fin count initially increases the surface area available to convection, 
+but after the optimal array, an increased fin count reduces exposed base area available for convection. Physically, too many fins can choke airflow, reducing effective convection.
+
+% -----------------------------
+\section{Discussion and Conclusions}
+
+Material thermal conductivity is the dominant factor affecting fin performance. 
+Aluminum 2024-T6 ($k \approx \SI{177}{W/m\cdot K}$) provides an order-of-magnitude improvement over stainless steel ($k \approx \SI{15}{W/m\cdot K}$), 
+resulting in significantly lower temperature rise for the same geometry. Nonmetallic materials are therefore unsuitable for compact heat sink applications.
+
+The convection coefficient used in this analysis ($h = \SI{50}{W/m^2\cdot K}$) corresponds to mild forced convection, 
+such as airflow within a vehicle cabin. Under purely natural convection conditions ($h \sim \SI{5}-\SI{10}{W/m^2\cdot K}$), 
+the predicted temperature reductions would be substantially smaller, indicating that airflow plays a critical role in real-world performance. 
+The assumed heat dissipation rate of $Q = \SI{10}{W}$ represents a conservative upper bound for sustained smartphone operation.
+
+Several model limitations should be noted. Radiation heat transfer is neglected and may contribute modestly at elevated temperatures. 
+The steady-state assumption ignores transient warm-up behavior that may be relevant during short-duration use. 
+Despite these limitations, the analysis demonstrates that a compact aluminum pin-fin heat sink can meaningfully reduce smartphone surface temperature 
+when moderate forced convection is present. An array of 20 aluminum fins with a diameter of 3 mm provides a favorable balance between thermal performance and geometric practicality.
 
 % -----------------------------
 \clearpage
-\section{Appendix: Python Code}
+\section*{Appendix: Python Code}
 
 \begin{lstlisting}
 import numpy as np
@@ -260,3 +267,4 @@ plt.close("all")
 \end{lstlisting}
 
 \end{document}
+
