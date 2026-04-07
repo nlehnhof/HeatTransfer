@@ -2,152 +2,197 @@
 \usepackage{amsmath, amssymb, graphicx, float, caption, subcaption}
 \usepackage{geometry}
 \geometry{margin=1in}
+\usepackage{booktabs}
+\usepackage{verbatim}
 
-\title{Heat Transfer Analysis: Heating a Black Powder-Coated Hydro Flask Using Sunlight}
-\author{Nate Lehnhof}
+\title{ME 340 Heat Transfer Portfolio 2:\\
+\large Heating a Black Powder-Coated Hydro Flask Using Sunlight}
+\author{Nate Lehnhof\\
+ME EN 340 - Section 1}
 \date{\today}
 
 \begin{document}
 
 \maketitle
 
+\clearpage
 \section*{Picture of Real-World Application}
-% Replace 'hydroflask_sun.jpg' with your own photo
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figures/sketch.jpg}
-    \caption{A black powder-coated Hydro Flask exposed to sunlight. Heat is transferred from sunlight to water inside.}
+\centering
+\rotatebox{270}{\includegraphics[width=0.5\textwidth]{figures/bottle.JPG}}
+\caption{A black powder-coated Hydro Flask exposed to sunlight. Heat is transferred from sunlight to water inside and lost through convection.}
 \end{figure}
 
 \section*{Description of Heat Transfer Process}
-Sunlight heats the outer surface of the black powder-coated Hydro Flask. Heat is transferred via multiple modes:
+Sunlight heats the outer surface of the black powder-coated Hydro Flask. Heat transfer occurs via:
 \begin{itemize}
-    \item \textbf{Radiation:} Sunlight (visible and infrared) is absorbed by the black coated surface.
-    \item \textbf{Conduction:} Heat conducts rapidly through the thin stainless steel wall into the water.
-    \item \textbf{Convection:} Ambient air convects heat away from the bottle surface.  
-    \textit{(No internal convection inside the water is considered; water is assumed well-mixed.)}
+\item \textbf{Radiation:} Solar energy is absorbed by the surface.
+\item \textbf{Convection:} Heat is lost from the surface to ambient air through forced convection.
 \end{itemize}
 
 \section*{Engineering Problem Statement}
-Determine the \textbf{steady-state water temperature} \(T_w\) in a 500 mL black Hydro Flask exposed to sunlight.
+A black hydro flask is left out in the open on a sunny and windy day. Find the \textbf{steady-state water temperature} $T_w$ in the 500 mL black Hydro Flask exposed to sunlight.
 
-\textbf{Given:}
-\begin{itemize}
-    \item Solar irradiance: \(q_\text{solar} = 800~\text{W/m²}\)
-    \item Ambient temperature: \(T_\infty = 300~\text{K}\)
-    \item Bottle surface absorptivity: \(\alpha = 0.85\)
-    \item Bottle emissivity: \(\epsilon = 0.9\)
-    \item Convective heat transfer coefficient (air): \(h = 10~\text{W/m²·K}\)
-    \item Wall thickness: \(L = 0.001~\text{m}\), stainless steel thermal conductivity: \(k = 16~\text{W/m·K}\)
-    \item Bottle surface area: \(A = 0.03~\text{m²}\)
-\end{itemize}
-
-\textbf{Find:} Water temperature \(T_w\) at steady state if the bottle surface temperature \(T_s\) is assumed to be \(330~\text{K}\).
-
-\section*{Sketch of Heat Transfer Problem}
+\subsection{Problem Approach}
 \begin{figure}[H]
-    \centering
-    % Replace 'bottle_sketch.jpg' with your own sketch
-    \includegraphics[width=0.5\textwidth]{figures/bottle_diagram.png}
-    \caption{Control volume: black powder-coated Hydro Flask with arrows showing radiation from the Sun, conduction through the stainless steel wall, and convection to ambient air. Water is assumed well-mixed (isothermal).}
+\centering
+\includegraphics[width=0.7\textwidth]{figures/bottle_diagram.png}
+\caption{Schematic of the problem setup showing the hydro flask, solar irradiation, and heat transfer mechanisms. Note that the wind is blowing perpindicular to the surface which is harder to show in the 2D diagram.}
 \end{figure}
 
-\section*{Assumptions}
+\subsection*{Assumptions}
 \begin{enumerate}
-    \item Steady-state conditions.  
-    \item Bottle wall temperature is uniform (lumped capacitance approximation).  
-    \item Properties (k, h, $\alpha$, $\epsilon$) are constant.  
-    \item Neglect heat losses through bottle cap and edges.  
-    \item Thin stainless steel wall allows conduction resistance to be small compared to convection.
-    \item Water is well-mixed (isothermal), so internal temperature gradients are neglected.
-    \item Water temperature equals the inner wall temperature (perfect conduction).
-    \item Surface is diffuse and opaque.  
+\item 1D, Steady-state conditions
+\item Thin wall $\Rightarrow$ negligible conduction resistance
+\item Water is well-mixed (isothermal) $\Rightarrow$ no free convection
+\item Uniform properties
+\item Neglect any losses through the top or bottom of the flask
+\item Assume the solar irradiance is constant
+\item Neglect any shading or reflection effects from the surroundings 
 \end{enumerate}
 
-\section*{Properties Needed}
+\subsection*{Given Properties}
+
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
-\hline
-Property & Value & Source \\ \hline
-Stainless steel thermal conductivity, $k$ & 16 W/m·K & 18/8 stainless steel \\ \hline
-Air convective coefficient, $h$ & 10 W/m²·K & Typical natural convection \\ \hline
-Absorptivity, $\alpha$ & 0.85 & Black powder coating \\ \hline
-Emissivity, $\epsilon$ & 0.9 & Black powder coating \\ \hline
-Stefan-Boltzmann constant, $\sigma$ & $5.67\times10^{-8}$ W/m$^2$·K$^4$ & Standard \\ \hline
+\caption{Thermophysical properties and environmental conditions used in the analysis}
+\begin{tabular}{lll}
+\toprule
+\textbf{Property} & \textbf{Value} & \textbf{Source} \\
+\midrule
+Solar irradiance, $G_{\text{solar}}$ & $800~\text{W m}^{-2}$ & Typical Value used in Textbook\\
+Ambient temperature, $T_\infty$ & $300~\text{K}$ & Assumed (Room Temperature) \\
+Surroundings temperature, $T_{\text{surr}}$ & $300~\text{K}$ & Assumed (Room Temperature) \\
+Absorptivity, $\alpha$ & $0.91$ & solarmirror.com \\
+Emissivity, $\epsilon$ & $0.94$ & solarmirror.com \\
+Convective coefficient, $h$ & $10~\text{W m}^{-2}\text{K}^{-1}$ & engineersedge.com \\
+Stefan-Boltzmann constant, $\sigma$ & $5.67 \times 10^{-8}~\text{W m}^{-2}\text{K}^{-4}$ & Physical constant \\
+\bottomrule
 \end{tabular}
-\caption{Material and environmental properties.}
 \end{table}
 
-\section*{Problem Setup / Equations}
-Energy balance on the water:
+\subsection*{Energy Balance}
+Because the wall conduction resistance is negligible, the surface temperature equals the water temperature:
 \begin{equation}
-q_\text{solar} \cdot \alpha A = q_\text{conduction} + q_\text{convection} + q_\text{radiation}
+T_s \approx T_w
 \end{equation}
 
-\subsection*{Heat Transfer Relations}
-\begin{align}
-\text{Conduction through bottle wall: } & q_\text{cond} = \frac{k A (T_s - T_w)}{L} \\
-\text{Convection to ambient air: } & q_\text{conv} = h A (T_s - T_\infty) \\
-\text{Radiation from surface to surroundings: } & q_\text{rad} = \epsilon \sigma A (T_s^4 - T_\infty^4)
-\end{align}
-
-Assuming thin stainless steel wall (negligible conduction resistance) and well-mixed water:
+Energy balance on the surface:
 \begin{equation}
-q_\text{solar} \cdot \alpha - q_\text{rad} = q_\text{conv} \implies
-T_w \approx T_s - \frac{\alpha q_\text{solar} - \epsilon \sigma (T_s^4 - T_\infty^4)}{h}
+    \text{Solar Irradiation Absorbed} = \text{Convective Loss} + \text{Radiative Loss}
+\end{equation}
+\begin{equation}
+\alpha G_{\text{solar}} = h (T_s - T_\infty) + \epsilon \sigma (T_s^4 - T_{\text{surr}}^4)
 \end{equation}
 
-\section*{Solution of the Equation}
-Assume bottle surface temperature \(T_s = 330~\text{K}\):
-\begin{align*}
-q_\text{rad} &= \epsilon \sigma (T_s^4 - T_\infty^4) \\
-&= 0.9 \cdot 5.67\times10^{-8} \cdot (330^4 - 300^4) \\
-330^4 &= 1.19\times10^{10}, \quad 300^4 = 8.1\times10^9 \\
-\Delta &= 3.8\times10^9 \\
-q_\text{rad} &\approx 0.9 \cdot 5.67\times10^{-8} \cdot 3.8\times10^9 \approx 194~\text{W/m²} \\
-q_\text{net} &= \alpha q_\text{solar} - q_\text{rad} = 0.85\cdot 800 - 194 \approx 494~\text{W/m²} \\
-T_w &= T_s - \frac{q_\text{net}}{h} = 330 - \frac{494}{10} \approx 281~\text{K} \approx 8^\circ\text{C}
-\end{align*}
+\section*{Solution}
 
-\textit{Note:} Water is assumed isothermal (well-mixed), so conduction through the wall is fast and internal temperature gradients are neglected.
+\textbf{Solar input:}
+\begin{equation}
+\alpha G_{\text{solar}} = 0.94 \times 800 = 752~\text{W m}^{-2}
+\end{equation}
+
+Solve for $T_s$.
+\begin{equation}
+752 = 10 (T_s - 300) + 0.94 \times 5.67 \times 10^{-8} (T_s^4 - 300^4)
+\end{equation}
+This is a nonlinear equation that can be solved iteratively or using numerical methods. See code in the appendix for the solve.
+
+\begin{equation}
+T_s \approx 342.6~\text{K} \quad (\text{or } 69.4^\circ C)
+\end{equation}
 
 \section*{Reasonableness and Insights}
-\textbf{Reasonableness:}
 \begin{itemize}
-    \item Temperature below surface temp — logical.  
-    \item Magnitude reasonable for a small Hydro Flask in direct sun.  
-\end{itemize}
-
-\textbf{Insights:}
-\begin{itemize}
-    \item Radiation drives heating; convection removes heat to ambient air.  
-    \item Thin stainless steel wall minimizes conduction resistance.  
-    \item Dark powder coating maximizes solar absorption and heating efficiency.  
+    \item The steady-state water temperature is above ambient, as expected under solar heating.
+    \item The magnitude of $T_w \approx 342.6~\text{K}$ ($69.4^\circ$C) is reasonable for a dark object in direct sunlight.
+    \item If we wanted to increase the temperature, we could increase the absorptivity of the surface or reduce convective losses, for example, by insulating the flask.
+    \item Neglecting conduction resistance through the thin stainless steel wall slightly underestimates the surface temperature relative to the water temperature, but the effect is small due to high thermal conductivity.
+    \item The temperature is well below boiling, which is physically reasonable given the assumed properties and environmental conditions.
+    \item Dark-colored flasks (high $\alpha$ and $\epsilon$) heat much more efficiently than metallic or polished surfaces.
 \end{itemize}
 
 \section*{Sensitivity Analysis}
 
-\subsection*{1. Effect of Absorptivity $\alpha$}
-Vary $\alpha$ from 0.6 (light bottle) to 0.95 (dark coating).  
-Higher $\alpha$ → more solar energy absorbed → higher water temperature.
-
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figures/alpha.png}
-    \caption{Water temperature vs. bottle absorptivity.}
+\centering
+\includegraphics[width=0.7\textwidth]{figures/alpha_2.png}
+\caption{Sensitivity of water temperature to changes in absorptivity coefficient ($\alpha$).}
 \end{figure}
 
-\subsection*{2. Effect of Convective Coefficient $h$}
-Vary $h$ from 5 to 25 W/m²·K (calm air vs. slight wind).  
-Higher $h$ → faster heat transfer → slightly lower water temperature.
-
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figures/convection.png}
-    \caption{Water temperature vs. convective coefficient.}
+\centering
+\includegraphics[width=0.7\textwidth]{figures/convection_2.png}
+\caption{Sensitivity of water temperature to changes in convection coefficient ($h$).}
 \end{figure}
 
-\textbf{Comment:} Sensitivity analysis shows water temperature is strongly affected by sunlight absorption and air convection. Well-mixed water allows for a simple lumped-capacitance model.
+\subsubsection*{Sensitivity Analysis Commentary}
+\begin{itemize}
+    \item \textbf{Effect of Absorptivity ($\alpha$):} Water temperature increases nearly linearly with absorptivity. Higher $\alpha$ means more solar energy absorbed, leading to higher steady-state temperatures. Changing $\alpha$ from 0.6 to 0.95 can increase $T_w$ by over 20°C, so $\alpha$ is a critical parameter for heating efficiency.
+    \item \textbf{Effect of Convection Coefficient ($h$):} Higher $h$ values increase heat loss, lowering water temperature. Sensitivity decreases at high $h$, as convection dominates the heat loss mechanism.
+    \item \textbf{Radiative Contribution:} Radiation depends on $T_s^4$, so its relative importance increases with surface temperature. For moderate solar heating, radiation and convection are comparable.
+    \item \textbf{Implications:} 
+    \begin{itemize}
+        \item A breezy environment (higher $h$) can reduce the heating efficiency significantly.
+        \item Increasing absorptivity is more effective than reducing convection at low $h$, but less impactful when $h$ is already large.
+    \end{itemize}
+\end{itemize}
+
+\section*{Appendix: Numerical Solution Code}
+This code uses a simple iterative method to solve for the surface temperature $T_s$ based on the energy balance.
+
+\begin{verbatim}
+import numpy as np
+from scipy.optimize import fsolve
+import matplotlib.pyplot as plt
+
+# -------------------------------
+# GIVEN PROPERTIES
+# -------------------------------
+T_inf = 300           # Ambient air temperature [K]
+sigma = 5.67e-8       # Stefan-Boltzmann constant [W/m^2/K^4]
+alpha_nom = 0.91      # Absorptivity
+epsilon = 0.94        # Emissivity
+q_solar = 800         # Solar irradiance [W/m^2]
+h_nom = 10            # Convective coefficient [W/m^2/K]
+
+# -------------------------------
+# ENERGY BALANCE FUNCTION
+# -------------------------------
+def energy_balance(Ts, alpha, epsilon, q_solar, h, T_inf):
+    return alpha*q_solar - h*(Ts - T_inf) - epsilon*sigma*(Ts**4 - T_inf**4)
+
+# -------------------------------
+# BASE CASE
+# -------------------------------
+T_w_base = fsolve(lambda T: energy_balance(T, alpha_nom, epsilon, q_solar, h_nom, T_inf), T_inf)[0]
+print("Steady-state water temperature: {:.1f} K ({:.1f} C)".format(T_w_base, T_w_base - 273.15))
+
+# -------------------------------
+# SENSITIVITY ANALYSIS 1: Absorptivity
+# -------------------------------
+alpha_values = np.linspace(0.6, 0.95, 8)
+T_w_alpha = [fsolve(lambda T: energy_balance(T, a, epsilon, q_solar, h_nom, T_inf), T_inf)[0] for a in alpha_values]
+
+plt.figure(figsize=(6,4))
+plt.plot(alpha_values, np.array(T_w_alpha)-273.15, marker='o', color='darkred')
+plt.xlabel("Absorptivity alpha")
+plt.ylabel("Water Temperature (C)")
+plt.grid(False)
+plt.show()
+
+# -------------------------------
+# SENSITIVITY ANALYSIS 2: Convection
+# -------------------------------
+h_values = np.linspace(5, 25, 9)
+T_w_h = [fsolve(lambda T: energy_balance(T, alpha_nom, epsilon, q_solar, h_val, T_inf), T_inf)[0] for h_val in h_values]
+
+plt.figure(figsize=(6,4))
+plt.plot(h_values, np.array(T_w_h)-273.15, marker='s', color='blue')
+plt.xlabel("Convective Coefficient h [W/m^2/K]")
+plt.ylabel("Water Temperature (C)")
+plt.grid(False)
+plt.show()
+\end{verbatim}
 
 \end{document}
